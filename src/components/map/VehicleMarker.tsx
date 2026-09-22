@@ -51,6 +51,8 @@ export function VehicleMarker({
     wrapper.style.width = "30px";
     wrapper.style.height = "52px";
     wrapper.style.cursor = onClick ? "pointer" : "default";
+    // Moving vehicles stay on top of trip pins (5) and landmark badges (1).
+    wrapper.style.zIndex = "10";
     // Smooths out the marker's movement between simulation ticks instead of
     // visibly jumping every ~200ms; maplibre applies position via a raw CSS
     // transform on this element, so a transition on it animates the glide.

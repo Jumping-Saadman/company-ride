@@ -46,9 +46,13 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Safety net: no single stray element should ever be able to force the
+       whole page to scroll sideways, on any device width. */
+    overflow-x: hidden;
   }
   body {
     margin: 0;
+    overflow-x: hidden;
     background: var(--color-surface-subtle);
     color: var(--color-ink-900);
   }

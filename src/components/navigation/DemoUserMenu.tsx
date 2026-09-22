@@ -85,7 +85,13 @@ export function DemoUserMenu() {
 
       <DropdownPanel
         open={open}
-        className="absolute right-0 z-40 mt-2 w-80 rounded-xl border border-ink-200 bg-white p-3 shadow-xl"
+        // Anchored to the viewport (not to this button) and clamped to its
+        // width, so the panel lines up with the header's own edge padding on
+        // any screen size.
+        // The menu's own content (role switcher, a demo-user list, controls)
+        // can run long, so this scrolls internally instead of overflowing
+        // past the bottom of short viewports.
+        className="fixed right-4 top-18 z-40 max-h-[calc(100vh-5.5rem)] w-[min(20rem,calc(100vw-2rem))] overflow-y-auto rounded-xl border border-ink-200 bg-white p-3 shadow-xl sm:right-6"
       >
           <p className="px-1 pb-2 text-xs font-semibold uppercase tracking-wide text-ink-400">
             Switch Demo Role

@@ -37,6 +37,8 @@ export function LocationMarker({
     el.style.background = color ?? VARIANT_COLOR[variant];
     el.style.border = "3px solid white";
     el.style.boxShadow = "0 2px 6px rgba(15, 23, 42, 0.35)";
+    // Trip pins sit above the always-on landmark badges (z-index 1).
+    el.style.zIndex = "5";
 
     const popup = new maplibregl.Popup({ offset: 14, closeButton: false }).setHTML(
       `<div style="font-family:Inter,system-ui,sans-serif"><strong style="display:block;font-size:13px;color:#0f172a">${label}</strong>${

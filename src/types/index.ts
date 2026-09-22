@@ -64,6 +64,13 @@ export interface Location {
   lat: number;
   lng: number;
   type: LocationType;
+  /**
+   * A permanent company site (HQ, corporate office, factory, regular client).
+   * Pinned locations are drawn on every map regardless of which trip is being
+   * viewed; unpinned ones are ad-hoc destinations that only show up when a
+   * trip actually goes there.
+   */
+  pinned?: boolean;
 }
 
 export interface Vehicle {

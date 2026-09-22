@@ -26,7 +26,7 @@ export function MobileNav({ role }: { role: UserRole }) {
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
-          <div className="relative flex h-full w-72 flex-col bg-white shadow-2xl">
+          <div className="relative flex h-full w-[min(18rem,85vw)] flex-col bg-white shadow-2xl">
             <div className="flex items-center justify-between border-b border-ink-100 px-4 py-4">
               <div className="flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600">

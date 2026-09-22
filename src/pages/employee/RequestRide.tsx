@@ -18,12 +18,34 @@ import { NewRideRequestInput } from "../../state/types";
 
 const STEPS = ["Trip Details", "Review", "Confirmation"];
 
+/**
+ * Our permanent sites are grouped first (they're the ones pinned on every map),
+ * with any ad-hoc destination that's been added listed separately below.
+ */
+function LocationOptions() {
+  const pinned = LOCATIONS.filter((l) => l.pinned);
+  const adHoc = LOCATIONS.filter((l) => !l.pinned);
+  const renderOption = (l: (typeof LOCATIONS)[number]) => (
+    <option key={l.id} value={l.id}>
+      {l.name}
+    </option>
+  );
+  return (
+    <>
+      <optgroup label="Company Sites">{pinned.map(renderOption)}</optgroup>
+      {adHoc.length > 0 && (
+        <optgroup label="Other Locations">{adHoc.map(renderOption)}</optgroup>
+      )}
+    </>
+  );
+}
+
 const initialForm: NewRideRequestInput = {
   employeeId: "",
   travelDate: "",
   departureTime: "",
-  pickupLocationId: LOCATIONS[0].id,
-  destinationLocationId: LOCATIONS[1].id,
+  pickupLocationId: "loc-hq",
+  destinationLocationId: "loc-factory",
   purpose: "",
   passengerCount: 1,
   notes: "",
@@ -151,11 +173,7 @@ export default function RequestRide() {
                     value={form.pickupLocationId}
                     onChange={(e) => update("pickupLocationId", e.target.value)}
                   >
-                    {LOCATIONS.map((l) => (
-                      <option key={l.id} value={l.id}>
-                        {l.name}
-                      </option>
-                    ))}
+                    <LocationOptions />
                   </Select>
                 </FieldWrapper>
                 <FieldWrapper
@@ -170,11 +188,7 @@ export default function RequestRide() {
                     error={!!errors.destinationLocationId}
                     onChange={(e) => update("destinationLocationId", e.target.value)}
                   >
-                    {LOCATIONS.map((l) => (
-                      <option key={l.id} value={l.id}>
-                        {l.name}
-                      </option>
-                    ))}
+                    <LocationOptions />
                   </Select>
                 </FieldWrapper>
               </div>

@@ -4,6 +4,7 @@ import * as maplibregl from "maplibre-gl";
 import { MapView } from "./MapView";
 import { RouteLayer } from "./RouteLayer";
 import { LocationMarker } from "./LocationMarker";
+import { LandmarkLayer } from "./LandmarkLayer";
 import { VehicleMarker } from "./VehicleMarker";
 import type { Location, RouteDefinition } from "../../types";
 
@@ -51,6 +52,7 @@ export function LiveTripMap({
       {(map) => (
         <>
           <FitBounds map={map} coordinates={route.coordinates} />
+          <LandmarkLayer map={map} excludeIds={[pickup.id, destination.id]} />
           <RouteLayer
             map={map}
             id={route.id}

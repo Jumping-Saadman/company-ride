@@ -9,8 +9,11 @@ export function Sidebar({ role }: { role: UserRole }) {
   const items = NAV_ITEMS[role];
 
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-r border-ink-200 bg-white lg:flex">
-      <div className="flex items-center gap-2.5 border-b border-ink-100 px-5 py-5">
+    // Fixed to the viewport (not a flex sibling that scrolls with the page)
+    // so the nav stays put while the main content area scrolls independently.
+    // AppShell reserves the matching space with `lg:pl-64` on the content column.
+    <aside className="fixed inset-y-0 left-0 z-20 hidden w-64 flex-col border-r border-ink-200 bg-white lg:flex">
+      <div className="flex shrink-0 items-center gap-2.5 border-b border-ink-100 px-5 py-5">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-brand-700 shadow-sm">
           <Building2 size={18} className="text-white" />
         </div>
@@ -44,7 +47,7 @@ export function Sidebar({ role }: { role: UserRole }) {
         ))}
       </nav>
 
-      <div className="border-t border-ink-100 px-4 py-3">
+      <div className="shrink-0 border-t border-ink-100 px-4 py-3">
         <span className="flex items-center gap-1.5 rounded-md bg-amber-50 px-2 py-1.5 text-xs font-medium text-amber-700">
           <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
           Demo Mode

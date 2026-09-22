@@ -50,15 +50,19 @@ export default function AdminLiveTrips() {
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         <Card className="overflow-hidden lg:col-span-2">
-          <div className="h-[420px] w-full sm:h-[560px]">
-            {vehicles.length === 0 ? (
-              <EmptyState icon={Radio} title="No active trips right now" className="h-full border-none" />
-            ) : (
-              <FleetMap
-                vehicles={vehicles}
-                focusedTripId={focusedTripId}
-                onSelectVehicle={setFocusedTripId}
-              />
+          {/* The map stays up even with nothing on the road - it is also our
+              map of the company's sites, not just of live vehicles. */}
+          <div className="relative h-[420px] w-full sm:h-[560px]">
+            <FleetMap
+              vehicles={vehicles}
+              focusedTripId={focusedTripId}
+              onSelectVehicle={setFocusedTripId}
+            />
+            {vehicles.length === 0 && (
+              <div className="pointer-events-none absolute left-1/2 top-3 z-10 flex -translate-x-1/2 items-center gap-2 rounded-full border border-ink-200/70 bg-white/90 px-3.5 py-1.5 text-xs font-medium text-ink-500 shadow-lg backdrop-blur-sm">
+                <Radio className="h-3.5 w-3.5" />
+                No active trips right now
+              </div>
             )}
           </div>
         </Card>

@@ -38,9 +38,13 @@ export function NotificationCenter() {
 
       <DropdownPanel
         open={open}
-        className="absolute right-0 z-40 mt-2 w-80 rounded-xl border border-ink-200 bg-white shadow-xl sm:w-96"
+        // Anchored to the viewport (not to this button) and clamped to its
+        // width, so the panel lines up with the header's own edge padding
+        // instead of drifting off-screen because the bell isn't the
+        // rightmost header control.
+        className="fixed right-4 top-18 z-40 flex max-h-[calc(100vh-5.5rem)] w-[min(20rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-xl border border-ink-200 bg-white shadow-xl sm:right-6 sm:w-96"
       >
-        <div className="flex items-center justify-between border-b border-ink-100 px-4 py-3">
+        <div className="flex shrink-0 items-center justify-between border-b border-ink-100 px-4 py-3">
           <p className="text-sm font-semibold text-ink-900">Notifications</p>
           {unreadCount > 0 && (
             <button
@@ -51,7 +55,10 @@ export function NotificationCenter() {
             </button>
           )}
         </div>
-        <div className="max-h-96 overflow-y-auto">
+        {/* min-h-0 lets this shrink below its content size inside the flex
+            column, which is what makes overflow-y-auto actually kick in
+            rather than the panel just growing past max-h. */}
+        <div className="min-h-0 flex-1 overflow-y-auto">
           {notifications.length === 0 ? (
             <EmptyState
               icon={Bell}
