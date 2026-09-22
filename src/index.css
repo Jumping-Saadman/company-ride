@@ -1,0 +1,93 @@
+@import "tailwindcss";
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+@theme {
+  --font-sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #2563eb;
+  --color-brand-600: #1d4ed8;
+  --color-brand-700: #1e40af;
+  --color-brand-800: #1e3a8a;
+  --color-brand-900: #172554;
+
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f8fafc;
+  --color-surface-muted: #f1f5f9;
+
+  --color-ink-900: #0f172a;
+  --color-ink-700: #334155;
+  --color-ink-500: #64748b;
+  --color-ink-400: #94a3b8;
+  --color-ink-200: #e2e8f0;
+  --color-ink-100: #f1f5f9;
+
+  --color-status-pending: #d97706;
+  --color-status-pending-bg: #fef3c7;
+  --color-status-approved: #2563eb;
+  --color-status-approved-bg: #dbeafe;
+  --color-status-active: #7c3aed;
+  --color-status-active-bg: #ede9fe;
+  --color-status-completed: #059669;
+  --color-status-completed-bg: #d1fae5;
+  --color-status-cancelled: #dc2626;
+  --color-status-cancelled-bg: #fee2e2;
+  --color-status-available: #059669;
+  --color-status-available-bg: #d1fae5;
+  --color-status-offline: #64748b;
+  --color-status-offline-bg: #f1f5f9;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    margin: 0;
+    background: var(--color-surface-subtle);
+    color: var(--color-ink-900);
+  }
+  #root {
+    min-height: 100svh;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-ink-200) transparent;
+  }
+}
+
+@layer utilities {
+  .maplibregl-popup-content {
+    border-radius: 12px;
+    box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.25);
+    padding: 12px 14px;
+    font-family: var(--font-sans);
+  }
+  .maplibregl-ctrl-attrib {
+    font-size: 10px;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.vehicle-pulse {
+  animation: pulse-ring 2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+}
