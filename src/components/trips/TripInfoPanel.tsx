@@ -25,7 +25,7 @@ export function TripInfoPanel({ trip, employee, driver, pickup, destination }: T
     <div>
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <Avatar name={employee?.name ?? "?"} color={employee?.avatarColor} />
+          <Avatar name={employee?.name ?? "?"} seed={employee?.id} color={employee?.avatarColor} />
           <div>
             <p className="text-sm font-semibold text-ink-900">{employee?.name ?? "Unknown"}</p>
             <p className="text-xs text-ink-500">Passenger</p>

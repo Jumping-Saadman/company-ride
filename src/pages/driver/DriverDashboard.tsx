@@ -3,7 +3,6 @@ import { CalendarClock, MapPin } from "lucide-react";
 import { useAppState } from "../../state/AppStateContext";
 import { useCurrentDriver } from "../../hooks/useCurrentActor";
 import { useTripDetails } from "../../hooks/useTripDetails";
-import { useTripSimulation } from "../../hooks/useTripSimulation";
 import { getLocationById } from "../../data/locations";
 import { isActiveTripStatus, TRIP_STATUS_META } from "../../data/constants";
 import { formatTime12h, todayISODate } from "../../lib/date";
@@ -34,7 +33,6 @@ export default function DriverDashboard() {
 
   const currentTrip = myTrips.find((t) => isActiveTripStatus(t.status));
   const currentTripDetails = useTripDetails(currentTrip);
-  useTripSimulation(currentTrip);
 
   if (!driver) return <EmptyState title="Select a demo driver to continue" />;
 
@@ -62,7 +60,11 @@ export default function DriverDashboard() {
             </div>
             <CardBody className="flex flex-col gap-4">
               <div className="flex items-center gap-2.5">
-                <Avatar name={currentTripDetails.employee?.name ?? "?"} color={currentTripDetails.employee?.avatarColor} />
+                <Avatar
+                  name={currentTripDetails.employee?.name ?? "?"}
+                  seed={currentTripDetails.employee?.id}
+                  color={currentTripDetails.employee?.avatarColor}
+                />
                 <div>
                   <p className="text-sm font-semibold text-ink-900">{currentTripDetails.employee?.name}</p>
                   <p className="text-xs text-ink-500">Passenger</p>

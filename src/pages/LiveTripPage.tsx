@@ -1,7 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { useTripById } from "../hooks/useTripDetails";
-import { useTripSimulation } from "../hooks/useTripSimulation";
 import { LiveTripMap } from "../components/map/LiveTripMap";
 import { TripInfoPanel } from "../components/trips/TripInfoPanel";
 import { TripStatusTimeline } from "../components/trips/TripStatusTimeline";
@@ -14,8 +13,6 @@ import { MapPinOff } from "lucide-react";
 export default function LiveTripPage() {
   const { tripId } = useParams<{ tripId: string }>();
   const details = useTripById(tripId);
-
-  useTripSimulation(details?.trip);
 
   if (!details || !details.route || !details.pickup || !details.destination) {
     return (

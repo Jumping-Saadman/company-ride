@@ -11,6 +11,7 @@ import {
 import { useAppActions, useAppState } from "../../state/AppStateContext";
 import { useToast } from "../../state/ToastContext";
 import { Avatar } from "../ui/Avatar";
+import { DropdownPanel } from "../ui/DropdownPanel";
 import { ROLE_LABELS } from "./navConfig";
 import { UserRole } from "../../types";
 import { useCurrentDriver, useCurrentEmployee } from "../../hooks/useCurrentActor";
@@ -57,6 +58,13 @@ export function DemoUserMenu() {
         ? driver?.avatarColor
         : "#1e3a8a";
 
+  const currentSeed =
+    state.currentUser.role === "employee"
+      ? (employee?.id ?? "employee")
+      : state.currentUser.role === "driver"
+        ? (driver?.id ?? "driver")
+        : "admin-sarah-rahman";
+
   return (
     <div className="relative" ref={ref}>
       <button
@@ -65,7 +73,7 @@ export function DemoUserMenu() {
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        <Avatar name={currentName} color={currentColor} size="sm" />
+        <Avatar name={currentName} seed={currentSeed} color={currentColor} size="sm" />
         <div className="hidden text-left sm:block">
           <p className="text-sm font-medium leading-tight text-ink-900">{currentName}</p>
           <p className="text-xs leading-tight text-ink-500">
@@ -75,11 +83,10 @@ export function DemoUserMenu() {
         <ChevronDown size={16} className="text-ink-400" />
       </button>
 
-      {open && (
-        <div
-          role="menu"
-          className="absolute right-0 z-40 mt-2 w-80 rounded-xl border border-ink-200 bg-white p-3 shadow-xl"
-        >
+      <DropdownPanel
+        open={open}
+        className="absolute right-0 z-40 mt-2 w-80 rounded-xl border border-ink-200 bg-white p-3 shadow-xl"
+      >
           <p className="px-1 pb-2 text-xs font-semibold uppercase tracking-wide text-ink-400">
             Switch Demo Role
           </p>
@@ -127,7 +134,7 @@ export function DemoUserMenu() {
                       state.currentUser.employeeId === emp.id ? "bg-brand-50" : ""
                     }`}
                   >
-                    <Avatar name={emp.name} color={emp.avatarColor} size="sm" />
+                    <Avatar name={emp.name} seed={emp.id} color={emp.avatarColor} size="sm" />
                     <span className="min-w-0 flex-1 truncate">
                       <span className="block truncate font-medium text-ink-800">{emp.name}</span>
                       <span className="block truncate text-xs text-ink-500">{emp.position}</span>
@@ -156,7 +163,7 @@ export function DemoUserMenu() {
                       state.currentUser.driverId === drv.id ? "bg-brand-50" : ""
                     }`}
                   >
-                    <Avatar name={drv.name} color={drv.avatarColor} size="sm" />
+                    <Avatar name={drv.name} seed={drv.id} color={drv.avatarColor} size="sm" />
                     <span className="min-w-0 flex-1 truncate">
                       <span className="block truncate font-medium text-ink-800">{drv.name}</span>
                       <span className="block truncate text-xs text-ink-500">{drv.vehicle.model}</span>
@@ -215,8 +222,7 @@ export function DemoUserMenu() {
               />
             </div>
           </div>
-        </div>
-      )}
+      </DropdownPanel>
     </div>
   );
 }

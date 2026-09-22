@@ -46,10 +46,10 @@ export default function AdminDashboard() {
       />
 
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiCard label="Trips Today" value={tripsToday} icon={Clock} accent="brand" />
-        <KpiCard label="Pending Requests" value={pendingRequests} icon={ClipboardCheck} accent="amber" />
-        <KpiCard label="Active Trips" value={activeTrips.length} icon={Radio} accent="violet" />
-        <KpiCard label="Available Drivers" value={availableDrivers} icon={Car} accent="emerald" />
+        <KpiCard label="Trips Today" value={tripsToday} icon={Clock} accent="brand" index={0} />
+        <KpiCard label="Pending Requests" value={pendingRequests} icon={ClipboardCheck} accent="amber" index={1} />
+        <KpiCard label="Active Trips" value={activeTrips.length} icon={Radio} accent="violet" index={2} />
+        <KpiCard label="Available Drivers" value={availableDrivers} icon={Car} accent="emerald" index={3} />
       </div>
 
       <div className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-3">

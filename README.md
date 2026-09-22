@@ -65,12 +65,14 @@ A small amber **Demo Mode** badge is always visible at the bottom of the sidebar
 
 ## Live GPS Simulation
 
-Once a trip reaches **In Progress**, the vehicle can move along its route on the map:
+Once a trip reaches **In Progress**, the vehicle starts moving along its route automatically — you don't need to open the Live Trip page or press anything for it to start:
 
-- Go to the trip's **Live Trip** page (`/live-trip/:tripId`), reachable from any dashboard/list via "View Live Trip" or "Open full live trip view."
-- Use the **Simulation** controls (Play/Pause, Reset, 1×/2×/4× speed) to animate the vehicle along a real road-following route between the pickup and destination.
-- Position, ETA, distance remaining, and progress percentage update live and stay in sync across every screen watching that trip (Employee dashboard, Driver dashboard, Admin Live Trips, and the Live Trip page all reflect the same simulation state).
+- A background simulation driver advances every in-progress trip continuously in shared state, so a vehicle keeps moving even while you're looking at a completely different page or role.
+- Routes are real road-snapped driving directions (fetched once from OSRM and baked into the app), so the vehicle follows actual Dhaka streets rather than a straight line, drawn as a turn-by-turn-style route line (white casing + colored path, with the already-driven portion fading to gray).
+- Open the trip's **Live Trip** page (`/live-trip/:tripId`, reachable via "View Live Trip" / "Open full live trip view") or any dashboard's active-trip card to watch it, and use the **Simulation** controls to Pause/Resume, Reset, or speed it up to **1×/2×/4×/8×** — handy for skipping ahead through a demo instead of waiting in real time.
+- Position, ETA, distance remaining, and progress percentage stay in sync across every screen watching that trip (Employee dashboard, Driver dashboard, Admin Live Trips, and the Live Trip page all reflect the same simulation state).
 - The Trip Timeline (visible on the Live Trip page and in Trip History) records each status change with a timestamp.
+- The planned route is also shown as a preview map on the ride request review step and in the admin's request detail drawer, before a trip has even started.
 
 ## End-to-End Demo Script
 
@@ -79,8 +81,8 @@ A good way to demonstrate the whole system in one sitting:
 1. Switch to **Employee → Arif Hossain**. Submit a ride request for tomorrow, HQ → Factory.
 2. Switch to **Admin**. Open Ride Requests, find the new request, **Approve** it, then **Assign Driver** (pick an available driver, e.g. Rahim Uddin).
 3. Switch to **Driver → Rahim Uddin**. On the dashboard, click through the status buttons: Driver En Route → Arrived at Pickup → Passenger Picked Up → Start Journey.
-4. Switch to **Employee**. The dashboard now shows the Active Trip with a live map. Press **Play** on the simulation — the vehicle moves, ETA and progress update.
-5. Switch to **Admin → Live Trips**. See the same vehicle moving on the fleet map.
+4. Switch to **Employee**. The dashboard now shows the Active Trip with a live map — the vehicle is already moving on its own; ETA and progress update automatically (use the 2×/4×/8× speed buttons to fast-forward if you don't want to wait).
+5. Switch to **Admin → Live Trips**. See the same vehicle still moving on the fleet map, right where the simulation left it.
 6. Switch back to **Driver** and click **Complete Trip**.
 7. Check **Trip History** (any role) — the completed trip is there with duration and distance.
 
@@ -88,9 +90,10 @@ No page refresh is needed at any point — everything is driven by shared in-mem
 
 ## Tech Stack
 
-React 19 · TypeScript · Vite · Tailwind CSS v4 · React Router · MapLibre GL JS (OpenStreetMap tiles) · Recharts · Lucide icons
+React 19 · TypeScript · Vite · Tailwind CSS v4 · React Router · MapLibre GL JS (OpenStreetMap tiles) · Recharts · Framer Motion · DiceBear (generated profile pictures) · Lucide icons
 
 ## Notes
 
 - Locations are real Dhaka coordinates (HQ in Rampura, Factory in Tejgaon, client offices in Karwan Bazar and Gulshan-2, a branch in Banani, and Hazrat Shahjalal International Airport).
+- Every person in the app (admin, every employee, every driver) has a distinct, deterministically generated profile picture — same person always gets the same picture, no photo upload needed.
 - There is no backend: refreshing the page keeps your changes (via `localStorage`), but clearing site data or using **Reset Demo Data** returns everything to the original seed state.

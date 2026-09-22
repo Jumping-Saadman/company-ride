@@ -162,4 +162,4 @@ export interface DemoUser {
   driverId?: string;
 }
 
-export type SimulationSpeed = 1 | 2 | 4;
+export type SimulationSpeed = 1 | 2 | 4 | 8;

@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Building2 } from "lucide-react";
 import { NAV_ITEMS } from "../navigation/navConfig";
 import { COMPANY_NAME } from "../../data/constants";
@@ -10,7 +11,7 @@ export function Sidebar({ role }: { role: UserRole }) {
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-ink-200 bg-white lg:flex">
       <div className="flex items-center gap-2.5 border-b border-ink-100 px-5 py-5">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-brand-700 shadow-sm">
           <Building2 size={18} className="text-white" />
         </div>
         <div>
@@ -21,20 +22,24 @@ export function Sidebar({ role }: { role: UserRole }) {
 
       <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-4">
         {items.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.end}
-            className={({ isActive }) =>
-              `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                isActive
-                  ? "bg-brand-50 text-brand-700"
-                  : "text-ink-600 hover:bg-ink-100 hover:text-ink-900"
-              }`
-            }
-          >
-            <item.icon size={17} />
-            {item.label}
+          <NavLink key={item.to} to={item.to} end={item.end} className="relative block">
+            {({ isActive }) => (
+              <span
+                className={`relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive ? "text-brand-700" : "text-ink-600 hover:bg-ink-100 hover:text-ink-900"
+                }`}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="sidebar-active-pill"
+                    className="absolute inset-0 rounded-lg bg-brand-50"
+                    transition={{ type: "spring", stiffness: 500, damping: 38 }}
+                  />
+                )}
+                <item.icon size={17} className="relative" />
+                <span className="relative">{item.label}</span>
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>

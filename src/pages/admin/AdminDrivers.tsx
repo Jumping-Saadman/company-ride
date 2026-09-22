@@ -39,7 +39,7 @@ export default function AdminDrivers() {
             <Card key={driver.id} className="p-5">
               <div className="mb-3 flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <Avatar name={driver.name} color={driver.avatarColor} size="lg" />
+                  <Avatar name={driver.name} seed={driver.id} color={driver.avatarColor} size="lg" />
                   <div>
                     <p className="text-sm font-semibold text-ink-900">{driver.name}</p>
                     <p className="text-xs text-ink-500">{driver.vehicle.model}</p>

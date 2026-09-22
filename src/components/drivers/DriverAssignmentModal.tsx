@@ -62,7 +62,7 @@ export function DriverAssignmentModal({ open, onClose, onAssign }: DriverAssignm
             }`}
           >
             <div className="flex items-center gap-3">
-              <Avatar name={driver.name} color={driver.avatarColor} />
+              <Avatar name={driver.name} seed={driver.id} color={driver.avatarColor} />
               <div>
                 <p className="text-sm font-semibold text-ink-900">{driver.name}</p>
                 <p className="text-xs text-ink-500">

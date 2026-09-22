@@ -26,6 +26,7 @@ export default function TripHistoryPage() {
   const [driverFilter, setDriverFilter] = useState("all");
   const [employeeFilter, setEmployeeFilter] = useState("all");
   const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const scopedTrips = useMemo(() => {
     if (role === "employee") return state.trips.filter((t) => t.employeeId === employee?.id);
@@ -118,7 +119,10 @@ export default function TripHistoryPage() {
                   return (
                     <tr
                       key={t.id}
-                      onClick={() => setSelectedTripId(t.id)}
+                      onClick={() => {
+                        setSelectedTripId(t.id);
+                        setDrawerOpen(true);
+                      }}
                       className="cursor-pointer border-b border-ink-50 last:border-none hover:bg-ink-50"
                     >
                       <td className="whitespace-nowrap px-5 py-3.5 font-mono text-xs text-ink-600">{t.id}</td>
@@ -156,8 +160,8 @@ export default function TripHistoryPage() {
       </Card>
 
       <Drawer
-        open={!!selectedTrip}
-        onClose={() => setSelectedTripId(null)}
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
         title={selectedTrip?.id ?? ""}
       >
         {selectedTrip && (

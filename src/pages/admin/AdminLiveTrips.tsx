@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Radio } from "lucide-react";
 import { useAppState } from "../../state/AppStateContext";
-import { useTripSimulation } from "../../hooks/useTripSimulation";
 import { getRouteById } from "../../data/routes";
-import { Trip } from "../../types";
 import { isActiveTripStatus, TRIP_STATUS_META } from "../../data/constants";
 import { PageHeader } from "../../components/layout/PageHeader";
 import { Card, CardHeader } from "../../components/ui/Card";
@@ -13,23 +11,6 @@ import { EmptyState } from "../../components/ui/EmptyState";
 import { FleetMap, FleetVehicle } from "../../components/map/FleetMap";
 
 const FLEET_COLORS = ["#2563eb", "#7c3aed", "#059669", "#d97706", "#dc2626", "#0891b2"];
-
-function ActiveTripSimulators({ tripIds }: { tripIds: string[] }) {
-  const { state } = useAppState();
-  return (
-    <>
-      {tripIds.map((id) => {
-        const trip = state.trips.find((t) => t.id === id);
-        return <TripSimTicker key={id} tripId={id} trip={trip} />;
-      })}
-    </>
-  );
-}
-
-function TripSimTicker({ trip }: { tripId: string; trip: Trip | undefined }) {
-  useTripSimulation(trip);
-  return null;
-}
 
 export default function AdminLiveTrips() {
   const { state } = useAppState();
@@ -61,7 +42,6 @@ export default function AdminLiveTrips() {
 
   return (
     <div>
-      <ActiveTripSimulators tripIds={activeTrips.map((t) => t.id)} />
       <PageHeader
         title="Live Trips"
         description="Real-time monitoring of every vehicle currently on the road."

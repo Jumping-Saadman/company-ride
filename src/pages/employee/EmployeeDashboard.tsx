@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { PlusCircle, MapPin, CalendarClock, History } from "lucide-react";
 import { useAppState } from "../../state/AppStateContext";
 import { useCurrentEmployee } from "../../hooks/useCurrentActor";
-import { useTripSimulation } from "../../hooks/useTripSimulation";
 import { useTripDetails } from "../../hooks/useTripDetails";
 import { getLocationById } from "../../data/locations";
 import { getDriverById } from "../../data/drivers";
@@ -34,7 +33,6 @@ export default function EmployeeDashboard() {
 
   const activeTrip = myTrips.find((t) => isActiveTripStatus(t.status));
   const activeTripDetails = useTripDetails(activeTrip);
-  useTripSimulation(activeTrip);
 
   const upcomingTrip = myTrips
     .filter((t) => t.status === TripStatus.SCHEDULED)
@@ -88,6 +86,7 @@ export default function EmployeeDashboard() {
               <div className="flex items-center gap-2.5">
                 <Avatar
                   name={activeTripDetails.driver?.name ?? "?"}
+                  seed={activeTripDetails.driver?.id}
                   color={activeTripDetails.driver?.avatarColor}
                 />
                 <div>

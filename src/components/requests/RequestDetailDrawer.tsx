@@ -1,10 +1,13 @@
+import { useEffect, useState } from "react";
 import { Drawer } from "../ui/Drawer";
 import { Button } from "../ui/Button";
 import { StatusBadge } from "../ui/Badge";
 import { RIDE_REQUEST_STATUS_META } from "../../data/constants";
 import { getLocationById } from "../../data/locations";
+import { getRouteBetween } from "../../data/routes";
 import { formatDateLong, formatTime12h } from "../../lib/date";
 import { RideRequest, RideRequestStatus, Employee } from "../../types";
+import { RoutePreviewMap } from "../map/RoutePreviewMap";
 
 interface RequestDetailDrawerProps {
   request: RideRequest | null;
@@ -34,23 +37,31 @@ export function RequestDetailDrawer({
   onAssign,
   onCancel,
 }: RequestDetailDrawerProps) {
-  if (!request) return null;
+  // Keep the last non-null request rendered while the drawer plays its
+  // close animation, instead of unmounting the content abruptly.
+  const [displayed, setDisplayed] = useState(request);
+  useEffect(() => {
+    if (request) setDisplayed(request);
+  }, [request]);
 
-  const pickup = getLocationById(request.pickupLocationId);
-  const destination = getLocationById(request.destinationLocationId);
+  if (!displayed) return null;
 
-  const canApprove = request.status === RideRequestStatus.PENDING;
-  const canReject = request.status === RideRequestStatus.PENDING;
+  const pickup = getLocationById(displayed.pickupLocationId);
+  const destination = getLocationById(displayed.destinationLocationId);
+  const route = getRouteBetween(displayed.pickupLocationId, displayed.destinationLocationId);
+
+  const canApprove = displayed.status === RideRequestStatus.PENDING;
+  const canReject = displayed.status === RideRequestStatus.PENDING;
   const canAssign =
-    request.status === RideRequestStatus.APPROVED || request.status === RideRequestStatus.PENDING;
+    displayed.status === RideRequestStatus.APPROVED || displayed.status === RideRequestStatus.PENDING;
   const canCancel =
-    request.status === RideRequestStatus.PENDING || request.status === RideRequestStatus.APPROVED;
+    displayed.status === RideRequestStatus.PENDING || displayed.status === RideRequestStatus.APPROVED;
 
   return (
     <Drawer
       open={!!request}
       onClose={onClose}
-      title={request.id}
+      title={displayed.id}
       footer={
         <div className="flex flex-wrap gap-2">
           {canApprove && (
@@ -81,16 +92,22 @@ export function RequestDetailDrawer({
           <p className="text-sm font-semibold text-ink-900">{employee?.name}</p>
           <p className="text-xs text-ink-500">{employee?.department}</p>
         </div>
-        <StatusBadge meta={RIDE_REQUEST_STATUS_META[request.status]} />
+        <StatusBadge meta={RIDE_REQUEST_STATUS_META[displayed.status]} />
       </div>
 
-      <Row label="Requested Date" value={formatDateLong(request.travelDate)} />
-      <Row label="Requested Time" value={formatTime12h(request.departureTime)} />
+      {pickup && destination && (
+        <div className="mb-4 overflow-hidden rounded-lg border border-ink-200">
+          <RoutePreviewMap route={route} pickup={pickup} destination={destination} />
+        </div>
+      )}
+
+      <Row label="Requested Date" value={formatDateLong(displayed.travelDate)} />
+      <Row label="Requested Time" value={formatTime12h(displayed.departureTime)} />
       <Row label="Pickup" value={pickup?.name ?? "-"} />
       <Row label="Destination" value={destination?.name ?? "-"} />
-      <Row label="Purpose" value={request.purpose} />
-      <Row label="Passengers" value={String(request.passengerCount)} />
-      <Row label="Notes" value={request.notes || "-"} />
+      <Row label="Purpose" value={displayed.purpose} />
+      <Row label="Passengers" value={String(displayed.passengerCount)} />
+      <Row label="Notes" value={displayed.notes || "-"} />
     </Drawer>
   );
 }

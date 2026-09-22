@@ -5,6 +5,7 @@ import {
   useState,
 } from "react";
 import type { ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2, Info, TriangleAlert, X } from "lucide-react";
 
 type ToastVariant = "success" | "info" | "warning";
@@ -67,31 +68,38 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         aria-live="polite"
         role="status"
       >
-        {toasts.map((toast) => {
-          const meta = VARIANT_STYLES[toast.variant];
-          const Icon = meta.icon;
-          return (
-            <div
-              key={toast.id}
-              className={`flex items-start gap-3 rounded-xl border ${meta.borderClass} bg-white p-4 shadow-lg`}
-            >
-              <Icon size={18} className={`mt-0.5 shrink-0 ${meta.iconClass}`} />
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-ink-900">{toast.title}</p>
-                {toast.description && (
-                  <p className="mt-0.5 text-sm text-ink-500">{toast.description}</p>
-                )}
-              </div>
-              <button
-                onClick={() => dismiss(toast.id)}
-                className="shrink-0 rounded-md p-1 text-ink-400 hover:bg-ink-100 hover:text-ink-700"
-                aria-label="Dismiss notification"
+        <AnimatePresence>
+          {toasts.map((toast) => {
+            const meta = VARIANT_STYLES[toast.variant];
+            const Icon = meta.icon;
+            return (
+              <motion.div
+                key={toast.id}
+                layout
+                initial={{ opacity: 0, y: 16, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, x: 40, scale: 0.95, transition: { duration: 0.15 } }}
+                transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                className={`flex items-start gap-3 rounded-xl border ${meta.borderClass} bg-white p-4 shadow-lg`}
               >
-                <X size={14} />
-              </button>
-            </div>
-          );
-        })}
+                <Icon size={18} className={`mt-0.5 shrink-0 ${meta.iconClass}`} />
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-ink-900">{toast.title}</p>
+                  {toast.description && (
+                    <p className="mt-0.5 text-sm text-ink-500">{toast.description}</p>
+                  )}
+                </div>
+                <button
+                  onClick={() => dismiss(toast.id)}
+                  className="shrink-0 rounded-md p-1 text-ink-400 transition-colors hover:bg-ink-100 hover:text-ink-700"
+                  aria-label="Dismiss notification"
+                >
+                  <X size={14} />
+                </button>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
       </div>
     </ToastContext.Provider>
   );

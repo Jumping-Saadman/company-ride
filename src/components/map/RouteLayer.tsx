@@ -6,7 +6,7 @@ interface RouteLayerProps {
   map: MapLibreMap;
   id: string;
   coordinates: [number, number][];
-  progress?: number; // 0-100, renders a solid "traveled" overlay
+  progress?: number; // 0-100, renders a muted "traveled" overlay
   color?: string;
 }
 
@@ -38,6 +38,12 @@ function buildTraveledCoordinates(
   return result;
 }
 
+/**
+ * Renders a route the way turn-by-turn navigation apps do: a soft white
+ * casing beneath a solid, rounded directions line in the vehicle/brand
+ * color for the road ahead, with the already-driven portion redrawn in a
+ * muted neutral tone on top so progress reads at a glance.
+ */
 export function RouteLayer({
   map,
   id,
@@ -45,6 +51,7 @@ export function RouteLayer({
   progress = 0,
   color = "#2563eb",
 }: RouteLayerProps) {
+  const casingSourceId = `${id}-casing`;
   const baseSourceId = `${id}-base`;
   const traveledSourceId = `${id}-traveled`;
   const setupRef = useRef(false);
@@ -52,24 +59,35 @@ export function RouteLayer({
   useEffect(() => {
     if (map.getSource(baseSourceId)) return;
 
-    map.addSource(baseSourceId, {
-      type: "geojson",
-      data: {
-        type: "Feature",
-        properties: {},
-        geometry: { type: "LineString", coordinates },
+    const routeGeometry = {
+      type: "Feature" as const,
+      properties: {},
+      geometry: { type: "LineString" as const, coordinates },
+    };
+
+    map.addSource(casingSourceId, { type: "geojson", data: routeGeometry });
+    map.addLayer({
+      id: `${casingSourceId}-line`,
+      type: "line",
+      source: casingSourceId,
+      layout: { "line-join": "round", "line-cap": "round" },
+      paint: {
+        "line-color": "#ffffff",
+        "line-width": 8,
+        "line-opacity": 0.9,
       },
     });
+
+    map.addSource(baseSourceId, { type: "geojson", data: routeGeometry });
     map.addLayer({
       id: `${baseSourceId}-line`,
       type: "line",
       source: baseSourceId,
       layout: { "line-join": "round", "line-cap": "round" },
       paint: {
-        "line-color": "#94a3b8",
-        "line-width": 4,
-        "line-dasharray": [0.2, 1.6],
-        "line-opacity": 0.8,
+        "line-color": color,
+        "line-width": 5,
+        "line-opacity": 0.95,
       },
     });
 
@@ -87,24 +105,27 @@ export function RouteLayer({
       source: traveledSourceId,
       layout: { "line-join": "round", "line-cap": "round" },
       paint: {
-        "line-color": color,
+        "line-color": "#94a3b8",
         "line-width": 5,
+        "line-opacity": 0.85,
       },
     });
 
     setupRef.current = true;
 
     return () => {
-      [`${baseSourceId}-line`, `${traveledSourceId}-line`].forEach((layerId) => {
-        if (map.getLayer(layerId)) map.removeLayer(layerId);
-      });
-      [baseSourceId, traveledSourceId].forEach((sourceId) => {
+      [`${casingSourceId}-line`, `${baseSourceId}-line`, `${traveledSourceId}-line`].forEach(
+        (layerId) => {
+          if (map.getLayer(layerId)) map.removeLayer(layerId);
+        },
+      );
+      [casingSourceId, baseSourceId, traveledSourceId].forEach((sourceId) => {
         if (map.getSource(sourceId)) map.removeSource(sourceId);
       });
       setupRef.current = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, id]);
+  }, [map, id, color]);
 
   useEffect(() => {
     const source = map.getSource(traveledSourceId) as GeoJSONSource | undefined;

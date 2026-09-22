@@ -2,7 +2,7 @@ import { Pause, Play, RotateCcw, Radio } from "lucide-react";
 import { useAppActions, useAppSelector } from "../../state/AppStateContext";
 import { SimulationSpeed, TripStatus } from "../../types";
 
-const SPEEDS: SimulationSpeed[] = [1, 2, 4];
+const SPEEDS: SimulationSpeed[] = [1, 2, 4, 8];
 
 export function SimulationControls({
   tripId,
@@ -13,7 +13,7 @@ export function SimulationControls({
 }) {
   const { setPlayback, resetPlayback } = useAppActions();
   const playback = useAppSelector((s) => s.playback[tripId]);
-  const isPlaying = playback?.isPlaying ?? false;
+  const isPlaying = playback?.isPlaying ?? true;
   const speed = playback?.speed ?? 1;
   const disabled = tripStatus !== TripStatus.IN_PROGRESS;
 

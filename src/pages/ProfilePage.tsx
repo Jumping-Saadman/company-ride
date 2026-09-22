@@ -16,6 +16,7 @@ export default function ProfilePage() {
 
   const name = role === "admin" ? "Sarah Rahman" : role === "employee" ? employee?.name : driver?.name;
   const color = role === "admin" ? "#1e3a8a" : role === "employee" ? employee?.avatarColor : driver?.avatarColor;
+  const seed = role === "admin" ? "admin-sarah-rahman" : role === "employee" ? employee?.id : driver?.id;
   const email = role === "admin" ? "admin@nexacore.demo" : employee?.email;
   const phone = role === "admin" ? "+880 1711-000000" : employee?.phone ?? driver?.phone;
 
@@ -25,7 +26,7 @@ export default function ProfilePage() {
       <Card>
         <CardBody>
           <div className="mb-6 flex items-center gap-4">
-            <Avatar name={name ?? "?"} color={color} size="lg" />
+            <Avatar name={name ?? "?"} seed={seed} color={color} size="xl" />
             <div>
               <p className="text-lg font-semibold text-ink-900">{name}</p>
               <p className="text-sm text-ink-500">{ROLE_LABELS[role]}</p>

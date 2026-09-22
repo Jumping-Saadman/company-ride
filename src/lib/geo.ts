@@ -19,6 +19,37 @@ export function haversineDistanceKm(a: LngLat, b: LngLat): number {
   return 2 * EARTH_RADIUS_KM * Math.asin(Math.sqrt(h));
 }
 
+/**
+ * Compass bearing in degrees (0 = north, 90 = east) from point a to point b.
+ */
+export function bearingBetween(a: LngLat, b: LngLat): number {
+  const [lng1, lat1] = a;
+  const [lng2, lat2] = b;
+  const phi1 = toRad(lat1);
+  const phi2 = toRad(lat2);
+  const dLng = toRad(lng2 - lng1);
+  const y = Math.sin(dLng) * Math.cos(phi2);
+  const x =
+    Math.cos(phi1) * Math.sin(phi2) -
+    Math.sin(phi1) * Math.cos(phi2) * Math.cos(dLng);
+  const theta = Math.atan2(y, x);
+  return ((theta * 180) / Math.PI + 360) % 360;
+}
+
+/**
+ * Removes consecutive duplicate points. A zero-length segment (common at
+ * OSRM-snapped start/end nodes) can hang MapLibre's GeoJSON tiling worker,
+ * leaving the source stuck "loading" and the line invisible with no error.
+ */
+export function dedupeConsecutive(coordinates: LngLat[]): LngLat[] {
+  const result: LngLat[] = [];
+  for (const c of coordinates) {
+    const last = result[result.length - 1];
+    if (!last || last[0] !== c[0] || last[1] !== c[1]) result.push(c);
+  }
+  return result;
+}
+
 export interface RouteMetrics {
   distanceKm: number;
   cumulativeKm: number[]; // cumulative distance at each coordinate index

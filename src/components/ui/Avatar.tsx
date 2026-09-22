@@ -1,29 +1,32 @@
+import { useMemo } from "react";
+import { getAvatarUri } from "../../lib/avatar";
+
 interface AvatarProps {
   name: string;
+  seed?: string;
   color?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  className?: string;
 }
 
 const SIZE_CLASSES = {
-  sm: "h-7 w-7 text-xs",
-  md: "h-9 w-9 text-sm",
-  lg: "h-12 w-12 text-base",
+  xs: "h-6 w-6",
+  sm: "h-8 w-8",
+  md: "h-9 w-9",
+  lg: "h-12 w-12",
+  xl: "h-20 w-20",
 };
 
-function getInitials(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-}
+export function Avatar({ name, seed, color = "#2563eb", size = "md", className = "" }: AvatarProps) {
+  const uri = useMemo(() => getAvatarUri(seed ?? name, color), [seed, name, color]);
 
-export function Avatar({ name, color = "#2563eb", size = "md" }: AvatarProps) {
   return (
-    <div
-      className={`flex shrink-0 items-center justify-center rounded-full font-semibold text-white ${SIZE_CLASSES[size]}`}
-      style={{ backgroundColor: color }}
+    <img
+      src={uri}
+      alt=""
       aria-hidden="true"
-    >
-      {getInitials(name)}
-    </div>
+      className={`shrink-0 rounded-full ring-2 ring-white shadow-sm transition-transform duration-200 ease-out hover:scale-105 ${SIZE_CLASSES[size]} ${className}`}
+      style={{ backgroundColor: color }}
+    />
   );
 }

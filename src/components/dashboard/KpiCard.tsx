@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface KpiCardProps {
   label: string;
@@ -6,6 +7,7 @@ interface KpiCardProps {
   icon: LucideIcon;
   accent?: "brand" | "amber" | "violet" | "emerald";
   hint?: string;
+  index?: number;
 }
 
 const ACCENT_CLASSES: Record<NonNullable<KpiCardProps["accent"]>, string> = {
@@ -15,9 +17,15 @@ const ACCENT_CLASSES: Record<NonNullable<KpiCardProps["accent"]>, string> = {
   emerald: "bg-emerald-50 text-emerald-600",
 };
 
-export function KpiCard({ label, value, icon: Icon, accent = "brand", hint }: KpiCardProps) {
+export function KpiCard({ label, value, icon: Icon, accent = "brand", hint, index = 0 }: KpiCardProps) {
   return (
-    <div className="rounded-xl border border-ink-200 bg-white p-5 shadow-sm">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ y: -2 }}
+      className="rounded-xl border border-ink-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
+    >
       <div className="flex items-start justify-between">
         <div>
           <p className="text-sm font-medium text-ink-500">{label}</p>
@@ -28,6 +36,6 @@ export function KpiCard({ label, value, icon: Icon, accent = "brand", hint }: Kp
           <Icon size={19} />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -78,7 +78,7 @@ export default function AdminEmployees() {
                     <tr key={e.id} className="border-b border-ink-50 last:border-none">
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-3">
-                          <Avatar name={e.name} color={e.avatarColor} size="sm" />
+                          <Avatar name={e.name} seed={e.id} color={e.avatarColor} size="sm" />
                           <div>
                             <p className="font-medium text-ink-900">{e.name}</p>
                             <p className="text-xs text-ink-500">{e.position}</p>

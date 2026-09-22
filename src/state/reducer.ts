@@ -15,7 +15,7 @@ import { createSeedState } from "./seedState";
 import { getEmployeeById } from "../data/employees";
 import { getDriverById } from "../data/drivers";
 import { getLocationById } from "../data/locations";
-import { getRouteBetween } from "../data/routes";
+import { getRouteBetween, getRouteById } from "../data/routes";
 import { isActiveTripStatus, nextTripStatus } from "../data/constants";
 import { generateNextRequestId } from "../lib/idGen";
 
@@ -375,6 +375,11 @@ export function appReducer(state: AppState, action: Action): AppState {
     case "RESET_PLAYBACK": {
       const trip = state.trips.find((t) => t.id === action.tripId);
       if (!trip) return state;
+      const route = getRouteById(trip.routeId);
+      const startPosition = route
+        ? { lat: route.coordinates[0][1], lng: route.coordinates[0][0] }
+        : trip.currentPosition;
+      const previousSpeed = state.playback[action.tripId]?.speed ?? 1;
       return {
         ...state,
         trips: state.trips.map((t) =>
@@ -384,12 +389,13 @@ export function appReducer(state: AppState, action: Action): AppState {
                 progress: 0,
                 distanceRemainingKm: t.totalDistanceKm,
                 etaMinutes: Math.round((t.totalDistanceKm / 26) * 60),
+                currentPosition: startPosition,
               }
             : t,
         ),
         playback: {
           ...state.playback,
-          [action.tripId]: { isPlaying: false, speed: 1 },
+          [action.tripId]: { isPlaying: true, speed: previousSpeed },
         },
       };
     }

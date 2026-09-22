@@ -5,6 +5,7 @@ import { useCurrentEmployee } from "../../hooks/useCurrentActor";
 import { useAppActions, useAppState } from "../../state/AppStateContext";
 import { useToast } from "../../state/ToastContext";
 import { LOCATIONS } from "../../data/locations";
+import { getRouteBetween } from "../../data/routes";
 import { MIN_LEAD_DAYS_FOR_REQUEST } from "../../data/constants";
 import { formatDateLong, formatTime12h, isDateAtLeastLeadDays, minLeadDate } from "../../lib/date";
 import { generateNextRequestId } from "../../lib/idGen";
@@ -12,6 +13,7 @@ import { PageHeader } from "../../components/layout/PageHeader";
 import { Card, CardBody } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
 import { FieldWrapper, Input, Select, Textarea } from "../../components/ui/FormField";
+import { RoutePreviewMap } from "../../components/map/RoutePreviewMap";
 import { NewRideRequestInput } from "../../state/types";
 
 const STEPS = ["Trip Details", "Review", "Confirmation"];
@@ -77,6 +79,7 @@ export default function RequestRide() {
 
   const pickup = LOCATIONS.find((l) => l.id === form.pickupLocationId);
   const destination = LOCATIONS.find((l) => l.id === form.destinationLocationId);
+  const route = getRouteBetween(form.pickupLocationId, form.destinationLocationId);
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -213,6 +216,11 @@ export default function RequestRide() {
 
           {step === 1 && (
             <div className="space-y-1">
+              {pickup && destination && (
+                <div className="mb-4 overflow-hidden rounded-lg border border-ink-200">
+                  <RoutePreviewMap route={route} pickup={pickup} destination={destination} />
+                </div>
+              )}
               <ReviewRow label="Travel Date" value={formatDateLong(form.travelDate)} />
               <ReviewRow label="Departure Time" value={formatTime12h(form.departureTime)} />
               <ReviewRow label="Pickup" value={pickup?.name ?? "-"} />

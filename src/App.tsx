@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppStateProvider } from "./state/AppStateContext";
 import { ToastProvider } from "./state/ToastContext";
+import { GlobalSimulationDriver } from "./state/GlobalSimulationDriver";
 import { AppShell } from "./components/layout/AppShell";
 import { RoleGuard } from "./components/layout/RoleGuard";
 
@@ -29,6 +30,7 @@ export default function App() {
   return (
     <AppStateProvider>
       <ToastProvider>
+        <GlobalSimulationDriver />
         <BrowserRouter>
           <Routes>
             <Route element={<AppShell />}>
