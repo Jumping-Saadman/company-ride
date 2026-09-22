@@ -48,7 +48,7 @@ A small amber **Demo Mode** badge is always visible at the bottom of the sidebar
 - **Dashboard** (`/employee`) — greeting, active trip (with live map, if one is in progress), next upcoming trip, and recent completed trips.
 - **Request Ride** (`/employee/request`) — 3-step form: trip details → review → confirmation. Travel date must be **at least 1 day in the future** (same-day and past dates are rejected with a clear message). On submit you get a reference ID (e.g. `TR-2026-0045`) and the request instantly appears in the Admin's Ride Requests queue.
 - **My Trips** (`/trips`) — this employee's own trip history.
-- **Notifications** (`/employee/notifications`) — updates like "Your ride has been assigned to Rahim Uddin."
+- **Notifications** — the bell icon in the header opens a dropdown panel with updates like "Your ride has been assigned to Rahim Uddin" (no separate page).
 - **Profile** (`/employee/profile`) — read-only contact/department info.
 
 ### Driver (e.g. Rahim Uddin)
@@ -68,7 +68,8 @@ A small amber **Demo Mode** badge is always visible at the bottom of the sidebar
 Once a trip reaches **In Progress**, the vehicle starts moving along its route automatically — you don't need to open the Live Trip page or press anything for it to start:
 
 - A background simulation driver advances every in-progress trip continuously in shared state, so a vehicle keeps moving even while you're looking at a completely different page or role.
-- Routes are real road-snapped driving directions (fetched once from OSRM and baked into the app), so the vehicle follows actual Dhaka streets rather than a straight line, drawn as a turn-by-turn-style route line (white casing + colored path, with the already-driven portion fading to gray).
+- Routes are real road-snapped driving directions (fetched once from OSRM and baked into the app), so the vehicle follows actual Dhaka streets rather than a straight line, drawn as a turn-by-turn-style route line (white casing + colored path). As the vehicle advances, the driven portion is removed from the line entirely - like Google Maps navigation, the highlighted route is visibly "eaten up" behind the car instead of just fading.
+- The vehicle itself is a top-down, Uber-style car marker that turns to face the direction of travel as it follows each bend in the road.
 - Open the trip's **Live Trip** page (`/live-trip/:tripId`, reachable via "View Live Trip" / "Open full live trip view") or any dashboard's active-trip card to watch it, and use the **Simulation** controls to Pause/Resume, Reset, or speed it up to **1×/2×/4×/8×** — handy for skipping ahead through a demo instead of waiting in real time.
 - Position, ETA, distance remaining, and progress percentage stay in sync across every screen watching that trip (Employee dashboard, Driver dashboard, Admin Live Trips, and the Live Trip page all reflect the same simulation state).
 - The Trip Timeline (visible on the Live Trip page and in Trip History) records each status change with a timestamp.

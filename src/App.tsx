@@ -9,7 +9,6 @@ import RootRedirect from "./pages/RootRedirect";
 import NotFoundPage from "./pages/NotFoundPage";
 import LiveTripPage from "./pages/LiveTripPage";
 import TripHistoryPage from "./pages/TripHistoryPage";
-import NotificationsPage from "./pages/NotificationsPage";
 import ProfilePage from "./pages/ProfilePage";
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -49,14 +48,12 @@ export default function App() {
               <Route element={<RoleGuard allow={["employee"]} />}>
                 <Route path="employee" element={<EmployeeDashboard />} />
                 <Route path="employee/request" element={<RequestRide />} />
-                <Route path="employee/notifications" element={<NotificationsPage />} />
                 <Route path="employee/profile" element={<ProfilePage />} />
               </Route>
 
               <Route element={<RoleGuard allow={["driver"]} />}>
                 <Route path="driver" element={<DriverDashboard />} />
                 <Route path="driver/schedule" element={<DriverSchedule />} />
-                <Route path="driver/notifications" element={<NotificationsPage />} />
                 <Route path="driver/profile" element={<ProfilePage />} />
               </Route>
 
